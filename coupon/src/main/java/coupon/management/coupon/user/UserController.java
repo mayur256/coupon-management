@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 import coupon.management.coupon.common.ResponseHandler;
 
-import java.util.List;
+import java.util.*;
 
 @RestController
 public class UserController {
@@ -40,12 +40,17 @@ public class UserController {
     } */
 
     @PostMapping("/user")
-    public ResponseEntity<Object> createUser(@RequestParam String name, @RequestParam String email) {
+    public ResponseEntity<Object> createUser(@RequestBody Map<String, String> payload) {
         // Response data initialisation
         UserEntity result = null;
         HttpStatus httpStatus = HttpStatus.OK;
-        String message = "Users created successfully!";
+        String message = "User created successfully!";
         String status = "Success";
+
+        // Get required params from request body
+        String name = payload.get("name");
+        String email = payload.get("email");
+
 
         try {
             result = new UserEntity(name, email);
@@ -62,14 +67,17 @@ public class UserController {
     @PutMapping("/user/{userId}")
     public ResponseEntity<Object> updateUser(
         @PathVariable("userId") Integer userId,
-        @RequestParam String name,
-        @RequestParam String email
+        @RequestBody Map<String, String> payload
     ) {
         // Response data initialisation
         UserEntity result = null;
         HttpStatus httpStatus = HttpStatus.OK;
         String message = "User updated successfully!";
         String status = "Success";
+
+        // Get required params from request body
+        String name = payload.get("name");
+        String email = payload.get("email");
 
         try {
             UserEntity user = userRepo.findById(userId).get();
